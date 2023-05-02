@@ -2,7 +2,7 @@ import functions from 'firebase-functions'
 import express from 'express'
 import cors from 'cors'
 import { login, signup } from './src/users.js'
-import { addShow } from './src/shows.js'
+import { addShow, getShows } from './src/shows.js'
 
 const PORT = 3005
 
@@ -16,7 +16,7 @@ app.use(express.json())
 app.post('/signup',signup)
 app.post('/login',login)
 app.post('/addshow',addShow)
-
+app.get('/shows',getShows)
 
 // show routes
 

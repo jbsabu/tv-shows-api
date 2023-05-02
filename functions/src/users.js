@@ -1,14 +1,17 @@
 import { FieldValue } from "firebase-admin/firestore";
 import { db } from "./dbConnect.js";
+import jwt from 'jsonwebtoken'
+import { secretKey } from "../secrets.js";
 
 const collection = db.collection("users");
 
+
+
 export async function signup(req, res) {
-  console.log("?????")
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400).send({ message: "Email & password are both required." });
-    return;
+    return; 
   }
   // todo: check if email is already in use
   const newUser = {
@@ -34,8 +37,11 @@ export async function login(req, res) {
   let user = users.docs.map(doc=> ({...doc.data(),id:doc.id}))[0]
   if (!user){
     res.status(400).send({message: "Invalid email and/or password."})
+    return
   }
   delete user.password
-  res.send(user)
+  const token = jwt.sign(user, secretKey)
+  
+  res.send({user,token})
 
 }
